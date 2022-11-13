@@ -1,6 +1,16 @@
--- DROP DATABASE test;
+-- エンコードを確認
+-- select current_setting('client_encoding');
+
+-- 変更
+set client_encoding to 'utf8';
+-- ユーザ作成
+CREATE USER testuser LOGIN PASSWORD 'testuser' CREATEDB;
+
 CREATE DATABASE test;
--- ¥c test
+
+-- DBをテストに変更
+\c test
+
 BEGIN;
 CREATE SCHEMA IF NOT EXISTS test_schema; 
 CREATE TABLE IF NOT EXISTS test_schema.user_infomation( 

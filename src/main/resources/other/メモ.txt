@@ -1,0 +1,75 @@
+コマンドプロンプト管理者権限実行
+Windowsキー + r 
+cmdと入力
+［Shift］＋［Ctrl］+ Enter
+
+エンコード変更
+C:\Program Files\PostgreSQL\15\data\postgresql.conf
+
+PostgreSQL/12/data/postgresql.conf
+// 665行目あたり
+lc_messages = 'Japanese_Japan.932' // デフォルト
+↓
+lc_messages = 'en_UC' // こっちに変更
+
+
+PostgreSQLの再起動
+set path=%path%;C:\Program Files\PostgreSQL\15\bin
+パターン1
+--PostgreSQLサービスの開始（-Dでdataフォルダを指定する）
+pg_ctl.exe start -D "C:\Program Files\PostgreSQL\15\data"
+
+--PostgreSQLサービスの停止
+pg_ctl.exe stop -D "C:\Program Files\PostgreSQL\15\data"
+--停止モードは3種類あり（詳細は下記参照）
+pg_ctl.exe stop -m smart -D 省略     
+pg_ctl.exe stop -m fast -D 省略
+pg_ctl.exe stop -m immediate -D 省略
+
+---------------------------------------------------------
+停止方法（smart , fast , immediate）について
+
+「ｰm」で指定できる停止方法には、smart , fast , immediateの3パターンがあります。
+
+・smart：すべてのクライアントが切断するのを待ってからデータベースを停止
+
+・fast：実行中のトランザクションをすべてロールバック＋クライアント接続を強制的切断し、停止
+
+・immediate は、サーバプロセスを即座に停止（DB再起動時にリカバリ処理が実行）
+
+尚、デフォルトはfastになっています。（PostgreSQL9.5以降）
+---------------------------------------------------------
+
+
+--PostgreSQLサービスの再起動
+pg_ctl.exe reload -D "C:\Program Files\PostgreSQL\15\data"
+
+--PostgreSQLサービスの状態を確認
+pg_ctl.exe status -D "C:\Program Files\PostgreSQL\15\data"
+
+
+PostgreSQLの再起動
+パターン2
+--PostgreSQLサービスの開始
+net start postgresql-XXXXX
+net start postgresql-x64-12  --例：PostgreSQL12の場合
+
+--PostgreSQLサービスの停止
+net stop postgresql-XXXXX
+net stop postgresql-x64-12   --例：PostgreSQL12の場合
+
+--PostgreSQLサービスを再起動する（停止 → 起動の順番に実行する）
+net stop postgresql-x64-12   --例：PostgreSQL12の場合
+net start postgresql-x64-12
+
+
+
+ファイルエンコード
+UTF-8→SJIS
+Get-Content -Encoding shift-jis .\init.sql | Out-File -Encoding utf-8 .\after8.txt
+
+SJIS→UTF-8
+Get-Content -Encoding utf-8 .\drop_UTF8.sql | Out-File -Encoding shift-jis .\drop_SJIS.sql
+
+Powershellバージョン確認
+$PSVersionTable
