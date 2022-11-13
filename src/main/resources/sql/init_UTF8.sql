@@ -1,7 +1,7 @@
 -- エンコードを確認
 -- select current_setting('client_encoding');
 
--- 変更
+-- UTF-8にエンコード
 set client_encoding to 'utf8';
 -- ユーザ作成
 CREATE USER testuser LOGIN PASSWORD 'testuser' CREATEDB;
@@ -26,3 +26,10 @@ COMMENT ON COLUMN test_schema.user_infomation.name IS '名前';
 COMMENT ON COLUMN test_schema.user_infomation.gender IS '性別'; 
 COMMENT ON COLUMN test_schema.user_infomation.hometown IS '出身地';
 COMMIT;
+
+-- 権限追加
+-- sooniにて実行
+GRANT ALL ON SCHEMA test_schema TO testuser;
+
+-- 権限追加
+GRANT ALL ON ALL TABLES IN SCHEMA test_schema TO testuser;
